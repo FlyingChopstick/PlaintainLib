@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PlaintainLib</name>
+    </assembly>
+    <members>
+        <member name="T:PlaintainLib.Plaintain">
+            <summary>
+            Represents the Plaintain transport payment card
+            </summary>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.#ctor">
+            <summary>
+            Create an empty Plaintain
+            </summary>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.#ctor(System.Int32)">
+            <summary>
+            Create a Plaintain with a predefined balance
+            </summary>
+            <param name="balance">Starting balance</param>
+        </member>
+        <member name="P:PlaintainLib.Plaintain.Balance">
+            <summary>
+            Card balance
+            </summary>
+        </member>
+        <member name="P:PlaintainLib.Plaintain.GroundRides">
+            <summary>
+            Rides since the start of the month
+            </summary>
+        </member>
+        <member name="P:PlaintainLib.Plaintain.SubwayRides">
+            <summary>
+            Rides since the start of the month
+            </summary>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.TopUp(System.Int32)">
+            <summary>
+            Increase balance of the card
+            </summary>
+            <param name="balance"></param>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.ResetRides">
+            <summary>
+            Reset the Ride Count
+            </summary>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.AddRide(PlaintainLib.Transport)">
+            <summary>
+            Charges the card if the balance is sufficient
+            </summary>
+            <param name="transport">Transport type</param>
+            <returns><see langword="true"/> if the operation is successful, <see langword="false"/> otherwise</returns>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.DisplayCurrentRides">
+            <summary>
+            Display all ride counters
+            </summary>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.DisplayCurrentRides(PlaintainLib.Transport)">
+            <summary>
+            Display the ride counter for the selected transport type
+            </summary>
+            <param name="transport">Transport type</param>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.GetRidePrice(System.Int32,PlaintainLib.Transport)">
+            <summary>
+            Get the price of the ride
+            </summary>
+            <param name="rideCount"></param>
+            <param name="transport"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.PrintMonthlyPrices(PlaintainLib.Transport)">
+            <summary>
+            Get monthly ride prices on the selected type
+            </summary>
+            <param name="transport">Transport type</param>
+        </member>
+        <member name="T:PlaintainLib.Transport">
+            <summary>
+            Transport types
+            </summary>
+        </member>
+        <member name="F:PlaintainLib.Transport.Ground">
+            <summary>
+            Ground transport
+            </summary>
+        </member>
+        <member name="F:PlaintainLib.Transport.Subway">
+            <summary>
+            Subway
+            </summary>
+        </member>
+        <member name="F:PlaintainLib.Transport.Commercial">
+            <summary>
+            Commercial cabs
+            </summary>
+        </member>
+    </members>
+</doc>

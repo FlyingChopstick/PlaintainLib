@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PlaintainLib
 {
+    /// <summary>
+    /// Represents the Plaintain transport payment card
+    /// </summary>
     public class Plaintain
     {
         /// <summary>
@@ -10,8 +15,7 @@ namespace PlaintainLib
         public Plaintain()
         {
             Balance = 0;
-            GroundRides = 0;
-            SubwayRides = 0;
+            ResetRides();
         }
         /// <summary>
         /// Create a Plaintain with a predefined balance
@@ -20,10 +24,11 @@ namespace PlaintainLib
         public Plaintain(int balance)
         {
             Balance = balance;
-            GroundRides = 0;
-            SubwayRides = 0;
+            ResetRides();
         }
 
+        private readonly Dictionary<Transport, int> _rideCounters = new Dictionary<Transport, int>();
+        private List<Transport> _transportTypes; 
 
         /// <summary>
         /// Card balance
@@ -32,51 +37,71 @@ namespace PlaintainLib
         /// <summary>
         /// Rides since the start of the month
         /// </summary>
-        public int GroundRides { get; private set; }
+        public int GroundRides
+        {
+            get => _rideCounters[Transport.Ground];
+            private set => _rideCounters[Transport.Ground]--;
+        }
         /// <summary>
         /// Rides since the start of the month
         /// </summary>
-        public int SubwayRides { get; private set; }
+        public int SubwayRides
+        {
+            get => _rideCounters[Transport.Subway];
+            private set => _rideCounters[Transport.Subway]--;
+        }
+
 
 
         /// <summary>
         /// Increase balance of the card
         /// </summary>
-        /// <param name="balance"></param>
-        public void TopUp(int balance)
+        /// <param name="balance"><see langword="true"/> if the value is >= 0, <see langword="false"/> otherwise</param>
+        public bool TopUp(int balance)
         {
-            if (balance < 0) balance = -balance;
-
-            this.Balance += balance;
+            if (balance < 0)
+            {
+                Balance += balance;
+                return true;
+            }
+            else
+                return false;
         }
         /// <summary>
         /// Reset the Ride Count
         /// </summary>
         public void ResetRides()
         {
-            this.GroundRides = 0;
-            this.SubwayRides = 0;
+            _transportTypes = Enum.GetValues(typeof(Transport)).Cast<Transport>().ToList();
+            foreach (var transport in _transportTypes)
+            {
+                _rideCounters[transport] = 0;
+            }
         }
         /// <summary>
-        /// Add a ride
+        /// Charges the card if the balance is sufficient
         /// </summary>
         /// <param name="transport">Transport type</param>
-        public void AddRide(Transport transport)
+        /// <returns><see langword="true"/> if the operation is successful, <see langword="false"/> otherwise</returns>
+        public bool AddRide(Transport transport)
         {
-            switch (transport)
-            {
-                case Transport.Ground: GroundRides++; break;
-                case Transport.Subway: SubwayRides++; break;
-            }
+            int rideCount = _rideCounters[transport] + 1;
 
-            int rideCount = transport switch
+            int ridePrice = GetRidePrice(rideCount, transport);
+
+            if (Balance >= ridePrice)
             {
-                Transport.Ground => GroundRides,
-                Transport.Subway => SubwayRides,
-                _ => 0
-            };
-            Balance -= GetRidePrice(rideCount, transport);
+                Balance -= ridePrice;
+                _rideCounters[transport]++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+
+
         /// <summary>
         /// Display all ride counters
         /// </summary>
