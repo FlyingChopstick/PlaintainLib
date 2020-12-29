@@ -23,12 +23,46 @@ namespace PlaintainLib
         /// <param name="balance">Starting balance</param>
         public Plaintain(int balance)
         {
+            if (balance < 0) throw new ArgumentException("Balance should be >=0.");
+
             Balance = balance;
             ResetRides();
         }
+        /// <summary>
+        /// Create a Plaintain with predefined ride count
+        /// </summary>
+        /// <param name="balance">Starting balance</param>
+        /// <param name="groundRides">Ground rides count</param>
+        /// <param name="subwayRides">Subway rides count</param>
+        public Plaintain(int balance, int groundRides, int subwayRides)
+        {
+            if (balance < 0) throw new ArgumentException("Balance should be >=0.");
+            Balance = balance;
 
-        private readonly Dictionary<Transport, int> _rideCounters = new Dictionary<Transport, int>();
-        private List<Transport> _transportTypes; 
+            ResetRides();
+            GroundRides = groundRides;
+            SubwayRides = subwayRides;
+        }
+
+
+        private readonly Dictionary<Transport, int> _rideCounters = new();
+        private static int _commercialPrice = 50;
+        private List<Transport> _transportTypes;
+
+        /// <summary>
+        /// Gets or sets the price of the Commercial ride
+        /// </summary>
+        public static int CommercialPrice
+        {
+            get => _commercialPrice;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Commercial price cannot be <0.");
+                else
+                    _commercialPrice = value;
+            }
+        }
 
         /// <summary>
         /// Card balance
@@ -52,7 +86,6 @@ namespace PlaintainLib
         }
 
 
-
         /// <summary>
         /// Increase balance of the card
         /// </summary>
@@ -68,7 +101,7 @@ namespace PlaintainLib
                 return false;
         }
         /// <summary>
-        /// Reset the Ride Count
+        /// Reset the Ride Count for each item in Transport enum to 0
         /// </summary>
         public void ResetRides()
         {
@@ -93,12 +126,35 @@ namespace PlaintainLib
             {
                 Balance -= ridePrice;
                 _rideCounters[transport]++;
-                return true;
+                return true; //successful operation
             }
             else
             {
-                return false;
+                return false; //not enough money
             }
+        }
+        /// <summary>
+        /// Adds several rides with the same transport type
+        /// </summary>
+        /// <param name="rideCount">How many rides to add</param>
+        /// <param name="transport">What type of ride to add</param>
+        /// <returns><see langword="true"/> if successful, <see langword="false"/> otherwise</returns>
+        public bool AddSeveral(int rideCount, Transport transport)
+        {
+            bool working = rideCount != 0;
+
+            int count = 0;
+            int cost = 0;
+            while (working && rideCount > 0)
+            {
+                working = AddRide(transport);
+                rideCount--;
+                count++;
+                cost += GetRidePrice(count, transport);
+            }
+
+            Console.WriteLine($"Added {count} {transport} rides for a total of {cost} rub.");
+            return working;
         }
 
 
@@ -134,7 +190,8 @@ namespace PlaintainLib
         /// <returns></returns>
         public static int GetRidePrice(int rideCount, Transport transport)
         {
-            if (transport == Transport.Commercial) return 50;
+            if (transport == Transport.Commercial) return _commercialPrice;
+
             return rideCount switch
             {
                 <= 10 => transport switch

@@ -20,6 +20,19 @@
             </summary>
             <param name="balance">Starting balance</param>
         </member>
+        <member name="M:PlaintainLib.Plaintain.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Create a Plaintain with predefined ride count
+            </summary>
+            <param name="balance">Starting balance</param>
+            <param name="groundRides">Ground rides count</param>
+            <param name="subwayRides">Subway rides count</param>
+        </member>
+        <member name="P:PlaintainLib.Plaintain.CommercialPrice">
+            <summary>
+            Gets or sets the price of the Commercial ride
+            </summary>
+        </member>
         <member name="P:PlaintainLib.Plaintain.Balance">
             <summary>
             Card balance
@@ -39,11 +52,11 @@
             <summary>
             Increase balance of the card
             </summary>
-            <param name="balance"></param>
+            <param name="balance"><see langword="true"/> if the value is >= 0, <see langword="false"/> otherwise</param>
         </member>
         <member name="M:PlaintainLib.Plaintain.ResetRides">
             <summary>
-            Reset the Ride Count
+            Reset the Ride Count for each item in Transport enum to 0
             </summary>
         </member>
         <member name="M:PlaintainLib.Plaintain.AddRide(PlaintainLib.Transport)">
@@ -52,6 +65,14 @@
             </summary>
             <param name="transport">Transport type</param>
             <returns><see langword="true"/> if the operation is successful, <see langword="false"/> otherwise</returns>
+        </member>
+        <member name="M:PlaintainLib.Plaintain.AddSeveral(System.Int32,PlaintainLib.Transport)">
+            <summary>
+            Adds several rides with the same transport type
+            </summary>
+            <param name="rideCount">How many rides to add</param>
+            <param name="transport">What type of ride to add</param>
+            <returns><see langword="true"/> if successful, <see langword="false"/> otherwise</returns>
         </member>
         <member name="M:PlaintainLib.Plaintain.DisplayCurrentRides">
             <summary>
